@@ -1,7 +1,8 @@
 
 var start = document.querySelector('#start');
 var submitScore = document.querySelector('#submitScore');
-var reset = document.querySelector('#reset');
+var resetNew = document.querySelector('#resetNew');
+var clearScores = document.querySelector('#clearScores');
 
 const quizAnswers=[{qindex:"1", qresponse:"A"},{qindex:"2", qresponse:"A"},{qindex:"3", qresponse:"C"},{qindex:"4", qresponse:"D"}];
 
@@ -9,10 +10,33 @@ start.addEventListener('click', function() {nextQuestion();});
 
 submitScore.addEventListener('click', function() {finalizeQuiz();});
 
-reset.addEventListener('click', function() {
+resetNew.addEventListener('click', function() {
     localStorage.setItem("currIndex", 0);
     localStorage.removeItem("userAnswers");
+
+    var qSections = document.getElementsByClassName("qSection");
+
+    for(var i=0; i < qSections.length; i++) {
+        var sectionID = "qs0" + i;
+
+        if (i===0) {
+            //Show this section because it's the start of the quiz
+            document.getElementById(sectionID).setAttribute('style', 'display: block');
+        }
+        else {
+            //Everyone else gets hidden
+            document.getElementById(sectionID).setAttribute('style', 'display: none');
+        }
+    }
 });
+
+clearScores.addEventListener('click', function() {
+    localStorage.removeItem("highScores");
+    var highScoreDisplay = document.getElementById("highScoreDisplay");
+    highScoreDisplay.innerHTML = "";
+
+})
+
 
 function processUserResponse(ansButton){
     //This is a wrapper to process the user responses to questions
@@ -36,23 +60,17 @@ function evaluateAnswer(ansButton) {
         //that qindex here is the same as qindex in the answer array at the top of this script file
         userAnswers = [{qindex: "1", isCorrect: false},{qindex: "2", isCorrect: false},{qindex: "3", isCorrect: false},{qindex: "4", isCorrect: false}];
     }
-
-    console.log(userQIndex,userQResponse);
     
     for(var i=0; i < quizAnswers.length; i++) {
 
         if(quizAnswers[i].qindex === userQIndex){
             //Found the question - now determine if the answer is correct
             if(quizAnswers[i].qresponse === userQResponse) {
-                console.log("Got It RIght");
                 userAnswers[i].isCorrect=true;
             }
             else {
-                console.log("Incorrect");
                 userAnswers[i].isCorrect=false;
             }
-
-            console.log(userAnswers[i].qindex, userAnswers[i].isCorrect);
 
             //Break out of the loop
             break;
@@ -66,8 +84,6 @@ function nextQuestion() {
     
     var storedIndex = localStorage.getItem("currIndex");
     var currIndex = 0;
-
-    console.log("Stored Item:", storedIndex);
 
     if (currIndex == null) {
         //No index set - init at 0
@@ -84,9 +100,6 @@ function nextQuestion() {
 
     var currQuestion = document.querySelector('#' + currPos);
     var nextQuestion = document.querySelector('#' + nextPos);
-    
-    //var currQuestion = document.getElementById("qs00");
-    //var nextQuestion = document.getElementById("qs01");
 
     currQuestion.setAttribute('style', 'display: none');
     nextQuestion.setAttribute('style', 'display: block');
@@ -95,7 +108,6 @@ function nextQuestion() {
 
     //Advance index and save for the next button click
     localStorage.setItem("currIndex",(currIndex+1));
-    console.log(currPos, nextPos);
   
 }
 
@@ -114,8 +126,6 @@ function finalizeQuiz(){
         window.alert("Initials should be at least one character and no more than three characters. No spaces are allowed.");
         return;
     }
-
-    console.log(userInitials);
     
     //Retrieve results
     var userAnswers = JSON.parse(localStorage.getItem("userAnswers"));
@@ -143,21 +153,30 @@ function finalizeQuiz(){
     //Pull High Scores list from local storage, the add this user to the top of the array
     var highScores=JSON.parse(localStorage.getItem("highScores"));
 
-    console.log(highScores);
-
     if (highScores === null) {
+        //Since we don't have an array there yet initialize a blank one
         highScores = [];
     }
 
-    console.log(highScores);
-
     var userResult = {initials: userInitials, score: quizScore};
-
     highScores.unshift(userResult);
-
     localStorage.setItem("highScores",JSON.stringify(highScores));
-    
 
-    console.log(quizScore, userResult);
+    //Update the high score display
+    var highScoreDisplay = document.getElementById("highScoreDisplay");
+    var tableMarkup = "<table>";
+
+    for(var i=0; i < highScores.length; i++) {
+        tableMarkup= tableMarkup + "<tr>";
+        tableMarkup= tableMarkup + "<td>" + highScores[i].initials + "</td>";
+        tableMarkup= tableMarkup + "<td>" + highScores[i].score + "</td>";
+        tableMarkup= tableMarkup + "</tr>";
+    }
+
+    tableMarkup = tableMarkup + "</table>";
+    highScoreDisplay.innerHTML = tableMarkup;
+
+    //Move to the next section of the quiz
+    nextQuestion();
 
 }

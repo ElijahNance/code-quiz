@@ -11,11 +11,11 @@
     <header>
         <h1>Code Quiz</h1>
     </header>
-   <section id="qs00" style="display:block">
+   <section id="qs00" class="qSection" style="display:block">
         <h2>Welcome to the Coding Quiz! To Begin Click the Start Button Below.</h2>
         <button id="start" >Start</button>
     </section>
-    <section id="qs01" style="display:none">
+    <section id="qs01" class="qSection" style="display:none">
         <h2 class="question">What's good?</h2>
             <button class="qButton" onclick="processUserResponse(this)" data-qindex="1" data-qresponse="A">a. Cats</button>
             <button class="qButton" onclick="processUserResponse(this)" data-qindex="1" data-qresponse="B">b. Dogs</button>
@@ -23,7 +23,7 @@
             <button class="qButton" onclick="processUserResponse(this)" data-qindex="1" data-qresponse="D">d. Pigs</button>
         </h2>
     </section>
-    <section id="qs02" style="display:none">
+    <section id="qs02" class="qSection" style="display:none">
         <h2 class="question">What's up?</h2>
             <button class="qButton" onclick="processUserResponse(this)" data-qindex="2" data-qresponse="A">a. The Sky</button>
             <button class="qButton" onclick="processUserResponse(this)" data-qindex="2" data-qresponse="B">b. The Ground</button>
@@ -31,7 +31,7 @@
             <button class="qButton" onclick="processUserResponse(this)" data-qindex="2" data-qresponse="D">d. A Frown</button>
         </h2>
     </section>
-    <section id="qs03" style="display:none">
+    <section id="qs03" class="qSection" style="display:none">
             <h2 class="question">What's left?</h2>
                 <button class="qButton" onclick="processUserResponse(this)" data-qindex="3" data-qresponse="A">a. The Passenger Side</button>
                 <button class="qButton" onclick="processUserResponse(this)" data-qindex="3" data-qresponse="B">b. The American Flag</button>
@@ -39,7 +39,7 @@
                 <button class="qButton" onclick="processUserResponse(this)" data-qindex="3" data-qresponse="D">d. Trump</button>
             </h2>
     </section>
-    <section id="qs04" style="display:none">
+    <section id="qs04" class="qSection" style="display:none">
         <h2 class="question">What's right?</h2>
             <button class="qButton" onclick="processUserResponse(this)" data-qindex="4" data-qresponse="A">a. The Book in The Statue of Liberty</button>
             <button class="qButton" onclick="processUserResponse(this)" data-qindex="4" data-qresponse="B">b. The outstretched hand turn signal</button>
@@ -47,22 +47,21 @@
             <button class="qButton" onclick="processUserResponse(this)" data-qindex="4" data-qresponse="D">d. The Passenger Side</button>
         </h2>
     </section>
-    <section id="qs05" style="display:none">
+    <section id="qs05" class="qSection" style="display:none">
         <h2 class="question">All Done!</h2>
             Enter Initials:
             <input id="playerInitials"/>
             <button id="submitScore">Submit</button>
         </h2>
     </section>
-    <section id="qs06" style="display:none">
+    <section id="qs06" class="qSection" style="display:none">
         <h2 class="question">High Scores</h2>
+            <div id="highScoreDisplay">
+                
+            </div>
             <button id="resetNew">Go Back</button>
             <button id="clearScores">Clear High Scores</button>
         </h2>
-    </section>
-    <!-- Temporary for use during development -->
-    <section style="display:block">
-        <h2><button id="reset">Reset</button></h2>
     </section>
     <script src="./assets/js/script.js"></script>
 </body>
