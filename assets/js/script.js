@@ -1,5 +1,6 @@
 var home = document.querySelector('#home');
 var start = document.querySelector('#start');
+var reset = document.querySelector('#reset');
 var question01 = document.querySelector("#qs01");
 var index = 0;
 
@@ -14,6 +15,11 @@ var index = 0;
 start.addEventListener('click', function() {
     nextQuestion();
 });
+
+reset.addEventListener('click', function() {
+    localStorage.setItem("currIndex", 0);
+});
+
 
 
 // function nextQuestion(currIndex) {
@@ -30,6 +36,7 @@ start.addEventListener('click', function() {
 
 function nextQuestion() {
 
+    
     var storedIndex = localStorage.getItem("currIndex");
     var currIndex = 0;
 
@@ -43,9 +50,19 @@ function nextQuestion() {
         //Convert local storage value to number
         currIndex = Number(storedIndex);
     }
+
     //hide the current section and unhide the next section
     var currPos = "qs0" + currIndex;
     var nextPos = "qs0" + (currIndex + 1);
+
+    var currQuestion = document.querySelector('#' + currPos);
+    var nextQuestion = document.querySelector('#' + nextPos);
+    
+    //var currQuestion = document.getElementById("qs00");
+    //var nextQuestion = document.getElementById("qs01");
+
+    currQuestion.setAttribute('style', 'display: none');
+    nextQuestion.setAttribute('style', 'display: block');
 
     console.log("CurrIndex", currIndex);
 
