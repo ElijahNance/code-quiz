@@ -140,6 +140,24 @@ function finalizeQuiz(){
     
     var quizScore = 100 * (totalCorrect / totalQuestions);
 
-    console.log(quizScore);
+    //Pull High Scores list from local storage, the add this user to the top of the array
+    var highScores=JSON.parse(localStorage.getItem("highScores"));
+
+    console.log(highScores);
+
+    if (highScores === null) {
+        highScores = [];
+    }
+
+    console.log(highScores);
+
+    var userResult = {initials: userInitials, score: quizScore};
+
+    highScores.unshift(userResult);
+
+    localStorage.setItem("highScores",JSON.stringify(highScores));
+    
+
+    console.log(quizScore, userResult);
 
 }
