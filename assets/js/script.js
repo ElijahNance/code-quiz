@@ -1,10 +1,13 @@
 
 var start = document.querySelector('#start');
+var submitScore = document.querySelector('#submitScore');
 var reset = document.querySelector('#reset');
 
 const quizAnswers=[{qindex:"1", qresponse:"A"},{qindex:"2", qresponse:"A"},{qindex:"3", qresponse:"C"},{qindex:"4", qresponse:"D"}];
 
 start.addEventListener('click', function() {nextQuestion();});
+
+submitScore.addEventListener('click', function() {finalizeQuiz();});
 
 reset.addEventListener('click', function() {
     localStorage.setItem("currIndex", 0);
@@ -33,13 +36,6 @@ function evaluateAnswer(ansButton) {
         //that qindex here is the same as qindex in the answer array at the top of this script file
         userAnswers = [{qindex: "1", isCorrect: false},{qindex: "2", isCorrect: false},{qindex: "3", isCorrect: false},{qindex: "4", isCorrect: false}];
     }
-    else {
-        //Debug only: See what's been stored
-        
-        // for(var i=0; i < userAnswers.length; i++){
-        //     console.log(userAnswers[i].qindex, userAnswers[i].isCorrect);
-        // }
-    }
 
     console.log(userQIndex,userQResponse);
     
@@ -57,7 +53,7 @@ function evaluateAnswer(ansButton) {
             }
 
             console.log(userAnswers[i].qindex, userAnswers[i].isCorrect);
-            
+
             //Break out of the loop
             break;
         }
@@ -101,4 +97,49 @@ function nextQuestion() {
     localStorage.setItem("currIndex",(currIndex+1));
     console.log(currPos, nextPos);
   
+}
+
+function finalizeQuiz(){
+    //Validate that player put in their initials, then score and store quiz results
+    //and then move to High Score page
+    
+    var userInitials = document.getElementById("playerInitials").value;
+
+    //Validate there's something to put
+    if(userInitials === null){
+        window.alert("Please enter your initials");
+        return;
+    }
+    else if (userInitials.length===0 || userInitials.length > 3){
+        window.alert("Initials should be at least one character and no more than three characters. No spaces are allowed.");
+        return;
+    }
+
+    console.log(userInitials);
+    
+    //Retrieve results
+    var userAnswers = JSON.parse(localStorage.getItem("userAnswers"));
+
+    if(userAnswers === null) {
+        //No answers returned - notify user
+        window.alert("We could not find your test results. Are you sure you took the test?");
+    } 
+
+    //Score the test - the AC didn't specify a scoring formula so we're going with pct
+    //Use the loop to calculate total questions asked and total correct so we can get a score
+    var totalQuestions = 0;
+    var totalCorrect = 0;
+
+    for (var i=0; i < userAnswers.length; i++){
+        totalQuestions = totalQuestions + 1;
+        
+        if(userAnswers[i].isCorrect) {
+            totalCorrect = totalCorrect + 1;
+        }
+    }
+    
+    var quizScore = 100 * (totalCorrect / totalQuestions);
+
+    console.log(quizScore);
+
 }
