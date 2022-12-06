@@ -51,12 +51,11 @@ function evaluateAnswer(ansButton) {
     var userQIndex = ansButton.getAttribute("data-qindex");
     var userQResponse = ansButton.getAttribute("data-qresponse");
 
-    //Retrieve the User Results object from local storage - if there isn't one then build it
-    //var userAnswers = localStorage.getItem("userAnswers");
+    //Retrieve the User Results object from local storage
     var userAnswers = JSON.parse(localStorage.getItem("userAnswers"));
 
     if(userAnswers === null) {
-        //No answers yet - need to initialize - note: to make this work, we're assuming
+        //to make this work, we're assuming
         //that qindex here is the same as qindex in the answer array at the top of this script file
         userAnswers = [{qindex: "1", isCorrect: false},{qindex: "2", isCorrect: false},{qindex: "3", isCorrect: false},{qindex: "4", isCorrect: false}];
     }
