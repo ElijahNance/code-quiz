@@ -1,33 +1,72 @@
-//var home = document.querySelector('#home');
+
 var start = document.querySelector('#start');
 var reset = document.querySelector('#reset');
 
-// start.addEventListener('click', function() {
-//     nextQuestion(index);
-//     // console.log(me);
-//     // question01.setAttribute('style', 'display: block')
-//     // home.setAttribute('style', 'display: none') 
-
-// });
-
-var qButtonElements = document.getElementsByClassName("qButton");
-
-for (var i = 0; i < qButtonElements.length; i++) {
-    qButtonElements[i].addEventListener("click", function() {nextQuestion();});
-}
+const quizAnswers=[{qindex:"1", qresponse:"A"},{qindex:"2", qresponse:"A"},{qindex:"3", qresponse:"C"},{qindex:"4", qresponse:"D"}];
 
 start.addEventListener('click', function() {nextQuestion();});
 
 reset.addEventListener('click', function() {
     localStorage.setItem("currIndex", 0);
+    localStorage.removeItem("userAnswers");
 });
 
-function proofOfConcept(myElement) {
-    console.log(myElement.getAttribute("data-response"));
+function processUserResponse(ansButton){
+    //This is a wrapper to process the user responses to questions
+    //First it calls the function to evaluate the answer and then
+    //it advances to the next question / section of the quiz
+    evaluateAnswer(ansButton);
+    nextQuestion();
+}
+
+function evaluateAnswer(ansButton) {
+    
+    var userQIndex = ansButton.getAttribute("data-qindex");
+    var userQResponse = ansButton.getAttribute("data-qresponse");
+
+    //Retrieve the User Results object from local storage - if there isn't one then build it
+    //var userAnswers = localStorage.getItem("userAnswers");
+    var userAnswers = JSON.parse(localStorage.getItem("userAnswers"));
+
+    if(userAnswers === null) {
+        //No answers yet - need to initialize - note: to make this work, we're assuming
+        //that qindex here is the same as qindex in the answer array at the top of this script file
+        userAnswers = [{qindex: "1", isCorrect: false},{qindex: "2", isCorrect: false},{qindex: "3", isCorrect: false},{qindex: "4", isCorrect: false}];
+    }
+    else {
+        //Debug only: See what's been stored
+        
+        // for(var i=0; i < userAnswers.length; i++){
+        //     console.log(userAnswers[i].qindex, userAnswers[i].isCorrect);
+        // }
+    }
+
+    console.log(userQIndex,userQResponse);
+    
+    for(var i=0; i < quizAnswers.length; i++) {
+
+        if(quizAnswers[i].qindex === userQIndex){
+            //Found the question - now determine if the answer is correct
+            if(quizAnswers[i].qresponse === userQResponse) {
+                console.log("Got It RIght");
+                userAnswers[i].isCorrect=true;
+            }
+            else {
+                console.log("Incorrect");
+                userAnswers[i].isCorrect=false;
+            }
+
+            console.log(userAnswers[i].qindex, userAnswers[i].isCorrect);
+            
+            //Break out of the loop
+            break;
+        }
+    }
+
+    //Save the results back to local storage
+    localStorage.setItem("userAnswers",JSON.stringify(userAnswers));
 }
 function nextQuestion() {
-
-    //console.log(this.getAttribute("data-response"));
     
     var storedIndex = localStorage.getItem("currIndex");
     var currIndex = 0;
