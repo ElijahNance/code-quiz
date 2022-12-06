@@ -1,8 +1,6 @@
-var home = document.querySelector('#home');
+//var home = document.querySelector('#home');
 var start = document.querySelector('#start');
 var reset = document.querySelector('#reset');
-var question01 = document.querySelector("#qs01");
-var index = 0;
 
 // start.addEventListener('click', function() {
 //     nextQuestion(index);
@@ -12,30 +10,24 @@ var index = 0;
 
 // });
 
-start.addEventListener('click', function() {
-    nextQuestion();
-});
+var qButtonElements = document.getElementsByClassName("qButton");
+
+for (var i = 0; i < qButtonElements.length; i++) {
+    qButtonElements[i].addEventListener("click", function() {nextQuestion();});
+}
+
+start.addEventListener('click', function() {nextQuestion();});
 
 reset.addEventListener('click', function() {
     localStorage.setItem("currIndex", 0);
 });
 
-
-
-// function nextQuestion(currIndex) {
-
-//     //hide the current section and unhide the next section
-//     var currPos = "qs0" + currIndex;
-//     var nextPos = "qs0" + (currIndex + 1);
-
-//     //Advance index in time for the next button click
-//     index = index++;
-//     console.log(currPos, nextPos);
-  
-// }
-
+function proofOfConcept(myElement) {
+    console.log(myElement.getAttribute("data-response"));
+}
 function nextQuestion() {
 
+    //console.log(this.getAttribute("data-response"));
     
     var storedIndex = localStorage.getItem("currIndex");
     var currIndex = 0;
